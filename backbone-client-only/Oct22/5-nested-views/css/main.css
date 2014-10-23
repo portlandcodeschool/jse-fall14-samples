@@ -1,0 +1,17 @@
+body{
+  background-color: lightblue;
+}
+
+#my-app{
+  margin: 3em 1em 1em 1em;
+  padding: 1em;
+  background-color: aliceblue;
+  box-shadow: 3px 3px 10px #000;
+}
+
+#purple-div{
+  padding: 1em;
+  border: 1px solid #CF00D9;
+  background: #F3A0F7;
+  color: #88008F;
+}
