@@ -1,0 +1,31 @@
+#checkerboard {
+	empty-cells:show;
+	border-spacing:0;
+	text-align:center;
+	font-size:18pt;
+	line-height:18pt;
+}
+
+#checkerboard td {
+	border:1px solid black;
+	width:30px;
+	height:30px;
+}
+
+#checkerboard td.even {
+	background:white;
+}
+
+#checkerboard td.odd {
+	background:gray;
+}
+
+#checkerboard td.redChecker:before {
+	color:red;
+	content:'o';
+}
+
+#checkerboard td.blackChecker:before {
+	color:black;
+	content:'o';
+}
