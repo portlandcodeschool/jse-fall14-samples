@@ -1,0 +1,143 @@
+// --- Models ---
+var GamePieces = Backbone.Collection.extend({
+    forward: function(from) {
+        var delta = (from<32)? 8: -8;
+        this.move(from,from+delta);
+    },
+    move: function(from,to) {
+        var model=this.findWhere({sq:from});
+        if (!model) return false;
+        model.set({sq:to});
+        // OR: model.set('sq',to);
+        return true;
+    }
+});
+
+var Checkers = (function() {
+
+	var Checker = Backbone.Model.extend({
+		defaults: {isKing: false}
+	});
+
+	var redStart = [1,3,5,7,8,10,12,14];
+	var blackStart=[49,51,53,55,56,58,60,62];
+
+	function makeChecker(where,color) {
+		return {
+			sq: where,
+			color: color
+		};
+	}
+
+	var Checkers = GamePieces.extend({
+		model:Checker,
+        gameName: 'Checker',
+		initialize: function() {
+			this.add(redStart.map(function(where){return makeChecker(where,'red')}));
+			this.add(blackStart.map(function(where){return makeChecker(where,'black')}));
+		},
+	});
+
+	return Checkers;
+})(); //end IIFE
+
+var Chessmen = (function() {
+
+	var ChessPiece = Backbone.Model.extend({
+		defaults: {}
+	});
+
+    var backrow= ['R','Kt','B','Q','Kg','B','Kt','R'];
+    var frontrow =['P','P','P','P','P','P','P','P'];
+
+	function makePiece(color,piece,where) {
+		return {
+			sq: where,
+            piece:piece,
+			color: color
+		};
+	}
+
+	var Chessmen = GamePieces.extend({
+		model:ChessPiece,
+        gameName: 'Chess',
+		initialize: function() {
+			this.add(backrow.concat(frontrow).map(function(name,idx){return makePiece('red',name,idx)}));
+			this.add(frontrow.concat(backrow).map(function(name,idx){return makePiece('black',name,idx+48)}));
+		}
+	});
+
+	return Chessmen;
+})(); //end IIFE
+
+
+// --- Views ---
+var SquareView = Backbone.View.extend({
+	tagName: 'td',
+	events: {'click': 'click'},
+	initialize: function(opts) {
+		this.n = opts.n;
+		this.$el.appendTo(opts.$row);
+	},
+	render: function(model) {
+		if (model===undefined) {
+				model = this.collection.findWhere({sq:this.n}) || false;
+		}
+        var classSuffix = this.collection.gameName;
+		if (!model) {
+			this.$el.removeClass('red'+classSuffix).removeClass('black'+classSuffix);
+		} else {
+            this.$el.attr('piece',model.get('piece'));
+			this.$el.addClass(model.get('color')+classSuffix);
+		}
+	},
+	click: function(evt) {
+		this.collection.forward(this.n);
+	}
+});
+
+
+var BoardView = Backbone.View.extend({
+	id:'checkerboard',
+	tagName: 'table',
+	initialize: function() {
+		this.collection.on('change:sq',this.render,this);
+		this.squares = [];//subviews
+		var n=0;
+		for (var i=0; i<8; ++i) {
+			var $row = $('<tr>').appendTo(this.$el);
+			for (var j=0; j<8; ++j) {
+				var opts = {
+					collection: this.collection,
+					className: ((i%2==j%2)?'odd':'even'),
+					$row: $row,
+					n: n++
+				}
+				this.squares.push(new SquareView(opts));
+			}
+		}
+		this.$el.appendTo('body');
+	},
+	render: function(model) {
+		console.log("refreshing...");
+		if (!model)
+			this.squares.forEach(function(sq){sq.render()}); //render all
+		else { //render just changed squares
+			var newSq = model.get('sq');
+			var oldSq = model.previous('sq');
+			this.squares[newSq].render(model);
+			this.squares[oldSq].render(false);
+		}
+	}
+});
+
+var board = null, game=null;
+function makeBoard() {
+    var Type = Chessmen;
+            //Checkers;
+	game = new Type();
+	board = new BoardView({collection:game});
+	board.render();
+}
+
+$(makeBoard);

@@ -1,0 +1,48 @@
+#checkerboard {
+	empty-cells:show;
+	border-spacing:0;
+	text-align:center;
+	font-size:18pt;
+	line-height:18pt;
+}
+
+#checkerboard td {
+	border:1px solid black;
+	width:30px;
+	height:30px;
+}
+
+#checkerboard td.even {
+	background:white;
+}
+
+#checkerboard td.odd {
+	background:gray;
+}
+
+#checkerboard td.Light.Checker:before {
+	color:red;
+	content:'o';
+}
+
+#checkerboard td.Dark.Checker:before {
+	color:black;
+	content:'o';
+}
+
+#checkerboard td.odd.Light.Chess:before {
+	color:white;
+	content:attr(piece);
+}
+
+#checkerboard td.even.Light.Chess:before {
+	color:gray;
+	content:attr(piece);
+}
+
+#checkerboard td.Dark.Chess:before {
+	color:black;
+	content:attr(piece);
+    font-weight:bold;
+}
+
