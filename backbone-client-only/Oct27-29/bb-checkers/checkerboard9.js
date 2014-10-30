@@ -33,8 +33,8 @@ var Checkers = (function() {
 		model:Checker,
         gameName: 'Checker',
 		initialize: function() {
-			this.add(redStart.map(function(where){return makeChecker(where,'red')}));
-			this.add(blackStart.map(function(where){return makeChecker(where,'black')}));
+			this.add(redStart.map(function(where){return makeChecker(where,'Light')}));
+			this.add(blackStart.map(function(where){return makeChecker(where,'Dark')}));
 		},
 	});
 
@@ -62,8 +62,8 @@ var Chessmen = (function() {
 		model:ChessPiece,
         gameName: 'Chess',
 		initialize: function() {
-			this.add(backrow.concat(frontrow).map(function(name,idx){return makePiece('red',name,idx)}));
-			this.add(frontrow.concat(backrow).map(function(name,idx){return makePiece('black',name,idx+48)}));
+			this.add(backrow.concat(frontrow).map(function(name,idx){return makePiece('Light',name,idx)}));
+			this.add(frontrow.concat(backrow).map(function(name,idx){return makePiece('Dark',name,idx+48)}));
 		}
 	});
 
@@ -85,10 +85,10 @@ var SquareView = Backbone.View.extend({
 		}
         var classSuffix = this.collection.gameName;
 		if (!model) {
-			this.$el.removeClass('red'+classSuffix).removeClass('black'+classSuffix);
+			this.$el.removeClass('Light '+classSuffix).removeClass('Dark '+classSuffix);
 		} else {
             this.$el.attr('piece',model.get('piece'));
-			this.$el.addClass(model.get('color')+classSuffix);
+			this.$el.addClass(model.get('color')).addClass(classSuffix);
 		}
 	},
 	click: function(evt) {
