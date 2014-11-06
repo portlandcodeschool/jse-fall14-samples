@@ -26,6 +26,7 @@ var router = Router();
 
 var debug = require('./debug.js');
 
+
 // when someone asks for the root of our site, send them index.html
 router.addRoute("/", function (req, res) {
 	debug.logRequest(req);
@@ -34,27 +35,28 @@ router.addRoute("/", function (req, res) {
     if (err) console.error(err);
 
     // Manual transmission and logging:
+    /*
     res.writeHead(200, {'Content-Type': 'text/html'});
     console.log('Data is type: ' + (typeof data));
     debug.logResponse(res,true);
     res.write(data);
     debug.logResponse(res);
     res.end();
+    */
 
     // OR SIMPLY:
-    //sendHtml(req, res, data);
+    sendHtml(req, res, data);
   });
 });
 
-// but need to handle requests for "static assets"...
+// handle requests for "static assets".
 // these are the files listed in your html pages 
 // that the browser makes requests for.
-/*
 router.addRoute("/*", st({
   path: __dirname + "/public",
   index:'/index.html',
 }));
-*/
+
 
 // create a server, pass in our router function, store the server instance in a variable
 var server = http.createServer(router);
