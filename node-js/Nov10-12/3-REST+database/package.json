@@ -1,0 +1,19 @@
+{
+  "name": "demo-backbone-w-server-integration",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Dan Bauer",
+  "license": "MIT",
+  "dependencies": {
+    "body": "^4.5.0",
+    "json-stringify-safe": "^5.0.0",
+    "orchestrate": "^0.3.6",
+    "routes-router": "^4.1.1",
+    "st": "^0.5.1"
+  }
+}
