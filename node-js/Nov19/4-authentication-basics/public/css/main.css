@@ -1,0 +1,16 @@
+body{
+  background-color: lightblue;
+}
+
+.panel{
+  margin: 3em 1em 1em 1em;
+  padding: 1em;
+  background-color: white;
+}
+
+.error {
+    color: red;
+}
+.success {
+    color: green;
+}
