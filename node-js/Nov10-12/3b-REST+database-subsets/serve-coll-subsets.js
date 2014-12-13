@@ -15,13 +15,9 @@ var db = require('orchestrate')(config.dbKey);
 // You'll need a collection called 'count' within your Orch app
 var dbCollectionName = 'count'; // which db collection to use
 
-
-// helper functions used with map:
-function getValue(obj) { //helper function to extract values from Orchestrate responses
-	return obj.value;
-}
-function prefixWithKey(val) {
-    return 'key:'+val;
+//helper function to extract values from Orchestrate responses:
+function getValue(obj) {
+    return obj.value;
 }
 
 // routes:
@@ -53,10 +49,10 @@ router.addRoute("/api", {
                 var queryObj = querystring.decode(opts.parsedUrl.query);
                 var keyStr = queryObj.keys;
                 if (!keyStr) throw "query includes no keys";
-                // turn '1,2,3' into 'key:1 OR key:2 OR key:3':
-                var searchStr = keyStr.split(',')
-                                    .map(prefixWithKey)
-                                    .join(' OR ');
+                // turn '1,2,3' into 'key:(1 OR 2 OR 3)':
+                var searchStr = "key:("
+                                +keyStr.split(',').join(' OR ')
+                                +")";
                 console.log("Searching db for "+searchStr);
 
                 // return subset of db:
